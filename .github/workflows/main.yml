@@ -34,7 +34,7 @@ jobs:
       uses: actions/setup-java@v4.2.1
       with:
         distribution: 'adopt' # Especifica a distribuição do JDK, neste caso AdoptOpenJDK
-        java-version: '11' # Especifica a versão do JDK a ser utilizada, neste caso a versão 11. Esta ação instala o JDK especificado no ambiente de execução
+        java-version: '17' # Especifica a versão do JDK a ser utilizada, neste caso a versão 11. Esta ação instala o JDK especificado no ambiente de execução
     
     # Terceiro passo: Instalar Node.js
     - name: Setup Node.js
