@@ -57,10 +57,10 @@ jobs:
       run: |
         echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/android-production.jks
 
-    - name: Increase versionCode
+    - name: Increase versionCode in build.gradle
       run: |
-        bash increase_version_code.sh
-      working-directory: ./scripts/increase_version_code.sh
+        bash scripts/increase_version_code.sh
+      working-directory: ./android/app
 
     # Oitavo passo: Build do aplicativo Android
     - name: Build Android APK
@@ -68,10 +68,10 @@ jobs:
         cd android
         ./gradlew assembleRelease
 
-    - name: Build Android AAB
-      run: | # Navega para o diretório android e executa o comando Gradle para construir o Android App Bundle (AAB). Este passo compila o código-fonte do aplicativo e gera um AAB de release
-        cd android
-        ./gradlew bundleRelease
+    # - name: Build Android AAB
+    #   run: | # Navega para o diretório android e executa o comando Gradle para construir o Android App Bundle (AAB). Este passo compila o código-fonte do aplicativo e gera um AAB de release
+    #     cd android
+    #     ./gradlew bundleRelease
 
     # Nono passo: Upload do APK para o Firebase App Distribution
     - name: Upload APK to Firebase App Distribution
