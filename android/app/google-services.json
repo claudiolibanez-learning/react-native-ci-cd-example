@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "956970274984",
+    "project_id": "react-native-ci-cd-example",
+    "storage_bucket": "react-native-ci-cd-example.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956970274984:android:4ce21e2ab300b5a375329d",
+        "android_client_info": {
+          "package_name": "com.reactnativecicdexample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_8MI4GumXGFaN12pcEEP08EFd-zuson0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

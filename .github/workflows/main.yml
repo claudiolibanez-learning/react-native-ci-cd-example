@@ -69,11 +69,15 @@ jobs:
         cd android
         ./gradlew bundleRelease
 
-    # # Nono passo: Upload do APK para o Firebase App Distribution
-    # - name: Upload APK to Firebase App Distribution
-    #   uses: wzieba/Firebase-Distribution-Github-Action@v1 # Utiliza a ação para fazer upload do APK para o Firebase
-    #   with:
-    #     appId: ${{ secrets.FIREBASE_APP_ID }} # ID do aplicativo no Firebase (armazenado em secrets)
-    #     token: ${{ secrets.FIREBASE_TOKEN }} # Token de autenticação do Firebase (armazenado em secrets)
-    #     groups: testers # Grupo de testadores que receberão o APK
-    #     file: android/app/build/outputs/apk/release/app-release.apk # Caminho para o APK gerado. Este passo faz o upload do APK gerado para o Firebase App Distribution
+    - name: Decode credential file content
+      run: |
+        echo ${{ secrets.CREDENTIAL_FILE_CONTENT }} | base64 --decode > firebase-service-account.json
+
+    # Nono passo: Upload do APK para o Firebase App Distribution
+    - name: Upload APK to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1 # Utiliza a ação para fazer upload do APK para o Firebase
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID}}
+        serviceCredentialsFileContent: "$(cat firebase-service-account.json)"
+        groups: testers
+        file: app/build/outputs/apk/release/app-release.apk
