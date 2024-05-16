@@ -1,21 +1,15 @@
-# Nome do workflow
 name: Build and Deploy React Native App
 
-# Gatilhos que iniciarão o workflow
 on:
   push:
     branches:
-      # O workflow será acionado quando houver um push na branch 'main'
       - main
   pull_request:
     branches:
-      # O workflow também será acionado em pull requests para a branch 'main'
       - main
 
-# Definição dos jobs
 jobs:
   build:
-    # Define o ambiente onde o job será executado
     runs-on: ubuntu-latest
 
     env:
@@ -25,32 +19,26 @@ jobs:
 
     steps:
     
-    # Primeiro passo: Checkout do código
     - name: Checkout code
-      uses: actions/checkout@v4.1.5 # Utiliza a ação de checkout para obter o código da branch especificada. A ação 'checkout' faz o download do repositório no diretório de trabalho
+      uses: actions/checkout@v4.1.5
 
-    # Segundo passo: Configurar o Java JDK
     - name: Setup Java JDK
       uses: actions/setup-java@v4.2.1
       with:
-        distribution: 'adopt' # Especifica a distribuição do JDK, neste caso AdoptOpenJDK
-        java-version: '17' # Especifica a versão do JDK a ser utilizada, neste caso a versão 11. Esta ação instala o JDK especificado no ambiente de execução
+        distribution: 'adopt'
+        java-version: '17'
     
-    # Terceiro passo: Instalar Node.js
     - name: Setup Node.js
-      uses: actions/setup-node@v3 # Utiliza a ação de configuração do Node.js
+      uses: actions/setup-node@v3
       with:
-        node-version: 20.x # Especifica a versão do Node.js a ser utilizada, neste caso a versão 20. Esta ação instala a versão especificada do Node.js no ambiente de execução
+        node-version: 20.x
 
-    # Quinto passo: Instalar dependências do projeto
     - name: Install dependencies
-      run: npm install # Comando para instalar as dependências do projeto usando NPM. Este passo instala todas as dependências listadas no arquivo package.json
+      run: npm install
 
-    # Sexto passo: Configurar o SDK do Android
     - name: Setup Android SDK
-      uses: android-actions/setup-android@v2 # Utiliza a ação de configuração do SDK do Android
+      uses: android-actions/setup-android@v2
 
-    # Sétimo passo: Decode keystore
     - name: Decode keystore
       env:
         ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -62,22 +50,19 @@ jobs:
       with:
         gradlePath: android/app/build.gradle
         versionCode: ${{github.run_number}}
-        versionName: 1.0.0
 
-    # Oitavo passo: Build do aplicativo Android
     - name: Build Android APK
-      run: | # Navega para o diretório android e executa o comando Gradle para construir a versão de release do aplicativo. Este passo compila o código-fonte do aplicativo e gera um APK de release
+      run: |
         cd android
         ./gradlew assembleRelease
 
     # - name: Build Android AAB
-    #   run: | # Navega para o diretório android e executa o comando Gradle para construir o Android App Bundle (AAB). Este passo compila o código-fonte do aplicativo e gera um AAB de release
+    #   run: |
     #     cd android
     #     ./gradlew bundleRelease
 
-    # Nono passo: Upload do APK para o Firebase App Distribution
     - name: Upload APK to Firebase App Distribution
-      uses: wzieba/Firebase-Distribution-Github-Action@v1 # Utiliza a ação para fazer upload do APK para o Firebase
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
       with:
         appId: ${{secrets.FIREBASE_APP_ID}}
         serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIAL_FILE_CONTENT }}
