@@ -57,6 +57,11 @@ jobs:
       run: |
         echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/android-production.jks
 
+    - name: Increase versionCode
+      run: |
+        bash increase_version_code.sh
+      working-directory: ./scripts/increase_version_code.sh
+
     # Oitavo passo: Build do aplicativo Android
     - name: Build Android APK
       run: | # Navega para o diretório android e executa o comando Gradle para construir a versão de release do aplicativo. Este passo compila o código-fonte do aplicativo e gera um APK de release
