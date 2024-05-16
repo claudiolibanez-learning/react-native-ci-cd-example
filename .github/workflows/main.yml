@@ -57,7 +57,6 @@ jobs:
       run: |
         echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/android-production.jks
 
-
     # Oitavo passo: Build do aplicativo Android
     - name: Build Android APK
       run: | # Navega para o diretório android e executa o comando Gradle para construir a versão de release do aplicativo. Este passo compila o código-fonte do aplicativo e gera um APK de release
@@ -69,15 +68,11 @@ jobs:
         cd android
         ./gradlew bundleRelease
 
-    - name: Decode credential file content
-      run: |
-        echo ${{ secrets.CREDENTIAL_FILE_CONTENT }} | base64 --decode > firebase-service-account.json
-
     # Nono passo: Upload do APK para o Firebase App Distribution
     - name: Upload APK to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1 # Utiliza a ação para fazer upload do APK para o Firebase
       with:
         appId: ${{secrets.FIREBASE_APP_ID}}
-        serviceCredentialsFileContent: "$(cat firebase-service-account.json)"
+        serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIAL_FILE_CONTENT }}
         groups: testers
         file: app/build/outputs/apk/release/app-release.apk
