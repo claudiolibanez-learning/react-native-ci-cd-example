@@ -57,10 +57,12 @@ jobs:
       run: |
         echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/android-production.jks
 
-    - name: Increase versionCode in build.gradle
-      run: |
-        bash scripts/increase_version_code.sh
-      working-directory: ./android/app
+    - name: Bump version
+      uses: chkfung/android-version-actions@v1.2.2
+      with:
+        gradlePath: android/app/build.gradle
+        versionCode: ${{github.run_number}}
+        versionName: 1.0.0
 
     # Oitavo passo: Build do aplicativo Android
     - name: Build Android APK
